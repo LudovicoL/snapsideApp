@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar text-center>
+    <ion-title>{{modalTitle}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-left>
+        <!-- ID : {{modelId}} -->
+        Reply to @{{commenterUname}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-left style="color:black">
+        <!-- ID : {{modelId}} -->
+        {{text}}
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row>
+      <ion-col text-center>
+        <ion-button (click)="closeModal()">Close Modal</ion-button>
+      </ion-col>
+    </ion-row> -->
+  </ion-grid>
+</ion-card-content>
+</ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-label position="stacked">Write an answer</ion-label>
+      <ion-textarea value='' #newText></ion-textarea>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Rating</ion-label>
+      <ion-select interface=popover value=-1 #ratingSel (ionChange)="setRating(ratingSel.value)">
+        <ion-select-option value=-1>No rating</ion-select-option>
+        <ion-select-option value=0>0 stars</ion-select-option>
+        <ion-select-option value=1>1 star</ion-select-option>
+        <ion-select-option value=2>2 stars</ion-select-option>
+        <ion-select-option value=3>3 stars</ion-select-option>
+        <ion-select-option value=4>4 stars</ion-select-option>
+        <ion-select-option value=5>5 stars</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <div class="ion-padding">
+      <ion-button [disabled]="newText.value==''" (click)="saveComment(modelId,newText.value,idAd);closeModal()">Send</ion-button>
+      <ion-button color="medium" (click)="closeModal()">Cancel</ion-button>
+    </div>
+    
+    </ion-card>
+</ion-content>
+
+
+

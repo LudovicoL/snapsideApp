@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Reservations
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let b of benefits" [routerLink]="['../seller-view-ad']" [queryParams]="{idAd:b['idAd']}" routerLinkActive="router-link-active">
+      <ion-thumbnail slot="start">
+        <ion-img *ngIf="b['preview']" [src]="b['preview']"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>(#{{b['idAd']}}) {{b['adTitle']}}</h3>
+        <p>{{prettyDate(b.checkinDate)}}</p>
+        <p>{{prettyDate(b.checkoutDate)}}</p>
+        <p>EUR {{b.paidAmount}}</p>
+        <p>{{b.paymentType}}</p>
+        <p>@{{b['customer']}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,25 @@
+// .popover-wrapper .wider-popover .popover-content{
+//     position: relative !important;
+//     margin: 90px !important;
+//     left: 0px !important;
+//     top: 0px !important;
+//     height: 990px !important;
+//     width: 100% !important; 
+// }
+
+// INSERT THIS IN theme/varaibles.scss
+ion-popover{
+    ion-backdrop{
+    opacity: 0.5 !important;
+    }
+    .popover-wrapper{
+    .popover-content{
+    width:80vw;
+    max-width:500px;
+    }
+    }
+    }
+
+    ion-popover {
+        --width: 320px;
+    }

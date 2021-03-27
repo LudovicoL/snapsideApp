@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Ionic App</title>
+
+  <base href="/" />
+
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+
+  <!-- add to homescreen for ios -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+
+     <!-- AIzaSyA4KdwJtPi9jK0GZvctyj4L0efaZa_bnv4 -->
+  <!-- Google maps api: KEY: AIzaSyA4KdwJtPi9jK0GZvctyj4L0efaZa_bnv4   registrata su andrea.chezzi.0@gmail.com  -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFVpH13jhZn6POY5N6RUFs9KJv5m7efG0" type="text/javascript"></script> -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4KdwJtPi9jK0GZvctyj4L0efaZa_bnv4&amp;libraries=places" type="text/javascript"></script> -->
+  <!-- <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script> -->
+<!-- <script src="cordova.js"></script> -->
+
+<!-- FIREBASE -->
+<link rel="manifest" href="./manifest.json">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>

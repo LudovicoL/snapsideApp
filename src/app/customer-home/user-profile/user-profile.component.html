@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button ion-button icon-only (click)="goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Customer profile
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+<ion-avatar margin size="large" style="margin: auto; margin-top: 1rem;">
+  <img src="/assets/avatar3.svg">
+</ion-avatar>
+
+
+<ion-card>
+
+    <ion-card-header>
+      <ion-card-title>
+        {{userData?.name}} {{userData?.surname}}
+      </ion-card-title>
+      <ion-card-subtitle>
+        @{{userData?.username}} 
+      </ion-card-subtitle>
+      
+    </ion-card-header>
+
+    <ion-card-content>
+      ID: {{userid}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    
+      <ion-card-content>
+        E-mail: {{userData?.email}}
+      </ion-card-content>
+
+      <ion-card-content>
+        Address: {{userData?.address}}
+      </ion-card-content>
+
+      <ion-card-content>
+        Phone: {{userData?.phone}}
+      </ion-card-content>
+
+      <ion-card-content>
+        Birth date: {{prettyDate(userData?.dob)}}
+      </ion-card-content>
+
+
+
+  </ion-card>
+
+</ion-content>
+<!-- <p>
+  user-profile works!
+</p> -->

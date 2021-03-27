@@ -1,0 +1,53 @@
+<ion-list>
+  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+
+    <ion-item [routerLink]="['user/customer/user-profile']">
+      <ion-avatar slot="start"    >
+        <!-- <img src="/assets/avatar3.svg"> -->
+        <img [src]="getImageNotSanitized(userData?.userImg)">
+      </ion-avatar>
+      <ion-label>{{userData?.name}} {{userData?.surname}} @{{userData?.username}}
+        <p>Customer </p>
+        <!-- <p></p> -->
+      </ion-label>
+      
+    </ion-item>
+
+    <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+      <ion-icon slot="start" [name]="p.icon"></ion-icon>
+      <ion-label>
+        {{p.title}}
+      </ion-label>
+    </ion-item>
+  </ion-menu-toggle>
+  <ion-item-divider></ion-item-divider>
+  <ion-item>
+    <ion-label>
+      Filter options:
+    </ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Filter by category:</ion-label>
+    <ion-select interface="popover" [selectOptions]="{'cssClass': 'wider-popover'}"  value="All" #selectCat [(ngModel)]="selectedCat" (ionChange)="sendSelectedCat($event)">
+      <ion-select-option value="All" >Show all</ion-select-option>
+      <ion-select-option *ngFor="let cat of categories" value="{{cat.idcategory}}" >{{cat.categoryName}}</ion-select-option>
+
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Sort by:</ion-label>
+    <ion-select interface="popover" value="idA" #sort [(ngModel)]="sortBy" (ionChange)="sendSortBy($event)">
+      <ion-select-option value="startDate" >Nearest available start date</ion-select-option>
+      <ion-select-option value="title" >Title</ion-select-option>
+      <ion-select-option value="PriceLH" >Price: Low to High</ion-select-option>
+      <ion-select-option value="PriceHL" >Price: High to Low</ion-select-option>
+      <ion-select-option value="mostRecent" >Newest</ion-select-option>
+      <ion-select-option value="leastRecent" >Oldest</ion-select-option>
+      <ion-select-option value="idA" >ID: Ascendent</ion-select-option>
+      <ion-select-option value="idD" >ID: Descendent</ion-select-option>
+      
+
+    </ion-select>
+  </ion-item>
+</ion-list>

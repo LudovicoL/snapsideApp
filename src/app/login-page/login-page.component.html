@@ -1,0 +1,63 @@
+<!-- <p>
+  login-page works!
+</p> -->
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      User Login
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-avatar margin size="large" style="margin: auto; margin-top: 4rem;">
+    <img src="/assets/avatar3.svg">
+  </ion-avatar>
+
+
+
+  <form padding (keyup.enter)="login()">
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input [(ngModel)]="model.username" #username="ngModel" required type="text" name="username"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="model.password" #password="ngModel" required type="password" name="password"></ion-input>
+      
+    </ion-item>
+    <section padding>
+      <ion-label *ngIf="logInFailed " color="danger" text-right>Entered username does not exist or wrong password. Authentication failed.</ion-label>
+      <br>
+      <ion-label *ngIf="logInFailed && (model.username==null || model.password==null || (model.username.length===0 || model.password.length===0))" text-right>Please, fill both username and password fields</ion-label>
+    </section>
+    
+    <!-- <p text-right>Forgot Password?</p> -->
+  <div class="ion-padding-top"></div>
+    <ion-button type="submit" (click)="login()" expand="block" color="primary">Login</ion-button>
+  </form>
+  
+  
+  <!-- <p text-center>Don't have a account?</p>
+  <ion-button expand="full" color="danger" >Register</ion-button> -->
+
+  <!-- <ion-button style="margin-top:16px" type="submit" (click)="null" expand="full" color="primary">Register</ion-button> -->
+
+  <!-- <ion-list>
+    <ion-item>
+      
+      Elemento 1 {{globals}} glob
+      <div class="item-note" slot="end">
+       descr
+      </div>
+    </ion-item>
+  </ion-list> -->
+</ion-content>

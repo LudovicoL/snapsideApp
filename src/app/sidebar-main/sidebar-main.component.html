@@ -1,0 +1,25 @@
+<ion-list>
+  <ion-item>
+    <img src="../../assets/Snapside.svg" class="app-img-menu"/>
+    <p class="app-name-menu" style="margin-top: 12px;">Snapside</p>
+  </ion-item>
+  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+    <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
+      <ion-icon slot="start" [name]="p.icon"></ion-icon>
+      <ion-label>
+        {{p.title}}
+      </ion-label>
+    </ion-item>
+  </ion-menu-toggle>
+  <!-- <ion-item>
+    <ion-label>Gaming</ion-label>
+    <ion-select interface="popover">
+      <ion-select-option value="nes">NES</ion-select-option>
+      <ion-select-option value="n64">Nintendo64</ion-select-option>
+      <ion-select-option value="ps">PlayStation</ion-select-option>
+      <ion-select-option value="genesis">Sega Genesis</ion-select-option>
+      <ion-select-option value="saturn">Sega Saturn</ion-select-option>
+      <ion-select-option value="snes">SNES</ion-select-option>
+    </ion-select>
+  </ion-item> -->
+</ion-list>

@@ -1,0 +1,35 @@
+
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Customer
+    </ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+
+
+<ion-tabs #tabs>
+
+  <ion-tab-bar  slot="bottom">
+    <ion-tab-button tab="tab1" (click)="openTab('tab1', $event)">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="tab2" (click)="openTab('tab2', $event)">
+      <ion-icon name="map"></ion-icon>
+      <ion-label>Explore the Map</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="tab3" (click)="openTab('tab3', $event)">
+      <ion-icon name="list-box"></ion-icon>
+      <ion-label>My bookings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>
+

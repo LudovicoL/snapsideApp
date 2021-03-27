@@ -1,0 +1,28 @@
+.about-logo{
+    display: block;
+    width:200px;
+    height:200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+h1 {
+    text-align: center;
+    font-size: 150%;
+    font-weight: bold;
+}
+h2 {
+    text-align: center;
+    font-size: 100%;
+    font-weight: bold;
+}
+p {
+    text-align: center;
+}
+
+.about {
+    background: url("/assets/background/mat-background3.png") no-repeat center/cover fixed;
+}
+ion-content {
+    --background: none;
+}

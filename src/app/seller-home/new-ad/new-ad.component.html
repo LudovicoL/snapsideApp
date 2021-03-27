@@ -1,0 +1,152 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button ion-button icon-only (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      New ad
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Main information</ion-card-title>
+      <ion-card-subtitle>Insert here the general details for your ad</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Insert a title</ion-label>
+        <ion-input [(ngModel)]="newTitle"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Insert description</ion-label>
+        <ion-textarea [(ngModel)]="newDescription"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Fixed price</ion-label>
+        <ion-input type="number" [(ngModel)]="newPrice"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Address</ion-label>
+        <ion-input [(ngModel)]="newAddress"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ad schema</ion-card-title>
+      <ion-card-subtitle>Choose the specific category of the asset or service you want to provide and insert the related properties</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Choose a category:</ion-label>
+        <ion-select interface="popover" value={{categories[0]?.idcategory}} #categorySel (ionChange)="setSelectedCategory(categorySel.value);updateSchema();resetPropertiesInput()" id="categorySel">
+          <ion-select-option value={{cat.idcategory}} *ngFor="let cat of categories">{{cat.categoryName}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Choose an item:</ion-label>
+        <ion-select #itemSel value={{items[0]?.idItem}} (ionChange)="setSelectedItem(itemSel.value);getAttributesByItem(selectedItemId)" id="itemSel">
+          <ion-select-option value="{{item.idItem}}" *ngFor="let item of items">{{item.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-label>Specific schema properties:</ion-label>
+      <ion-item *ngIf="properties.length===0">
+        <ion-label>No specific properties to set for the choosen schema.</ion-label>
+      </ion-item>
+      <ion-item *ngFor="let p of properties">
+        <ion-label position="floating">{{p.attributeName}}</ion-label>
+        <ion-input [(ngModel)]="attributeIndexes[p.idattribute]" name="name{{p.idattribute}}" type="text"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Availability dates interval</ion-card-title>
+      <ion-card-subtitle>Pick dates of begin and end of your offer. (Date format: DD/MM/YYYY)</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Choose a begin date:</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [min]=minDateBegin [max]=maxDateBegin placeholder="Select Date" (ionChange)="addEventBegin($event)"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Choose an end date:</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [min]=minDateEnd [max]=maxDateEnd placeholder="Select Date" (ionChange)="addEventEnd($event)"></ion-datetime>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Upload images</ion-card-title>
+      <ion-card-subtitle>Choose the images to upload for your ad gallery. This first image in the upload list will be the preview image of this ad.</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="selectImage()">Add picture</ion-button>
+      <ion-list>
+        <ion-reorder-group (ionItemReorder)="reorderImages($event)" disabled="false">
+          <ion-item *ngFor="let file of loadedImages; let i = index">
+            <ion-button (click)="removeFile(i)"><ion-icon name="close"></ion-icon></ion-button>
+            <ion-img [src]="loadedImages[i].content" id="preview"></ion-img>
+            <ion-label>
+              <b>Image #{{i+1}}:</b> "{{loadedImages[i].mediaName}}"
+            </ion-label>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+        </ion-reorder-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Add maps locations</ion-card-title>
+      <ion-card-subtitle>Here you can search specific addresses for your asset/service or manually pick the space coordinates directly on the map</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="form-group">
+        <label>Enter address</label>
+        <input type="text" class="form-control" (change)="keyAddress()" (keydown.enter)="$event.preventDefault(); keyAddress()" placeholder="Enter address here" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+      </div>
+      <agm-map id="mmap" [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [scrollwheel]="null"  [mapTypeControl]='true'>
+        <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"
+          (dragEnd)="markerDragEnd($event)"></agm-marker>
+      </agm-map>
+      <h5 *ngIf="address?.length>0">Address: {{address}}</h5>
+      <div>Latitude: {{latitude}}</div>
+      <div>Longitude: {{longitude}}</div>
+      <ion-button (click)="addMapLocation()">Pick this location</ion-button>
+      <ion-list>
+        <ion-reorder-group (ionItemReorder)="reorderPoints($event)" disabled="false">
+          <ion-item *ngFor="let data of points; let i = index">
+            <ion-button (click)="removeMapLocation(i)"><ion-icon name="close"></ion-icon></ion-button>
+            <ion-label>
+              <small><b>#{{i+1}}</b> {{data.address}} ({{data.lat}}, {{data.long}})</small>
+            </ion-label>
+            <ion-reorder slot="end"></ion-reorder>
+          </ion-item>
+        </ion-reorder-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ad publication status</ion-card-title>
+      <ion-card-subtitle>Decide if you want to keep this new ad as a private draft or to go straight to finalization and publication request. (Only you can see ad drafts until you decide to finalize and publish them later)</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>{{publicationStatus}}</ion-label>
+        <ion-toggle id="toggle" slot="start" color="success" (click)=changePublicationStatus()></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <section padding>
+  <ion-button color="success" expand="block" (click)="checkInformationsAd()" ion-margin-bottom>Confirm</ion-button>
+</section>
+</ion-content>
+

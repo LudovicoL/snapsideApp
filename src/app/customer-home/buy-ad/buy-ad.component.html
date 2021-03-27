@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button ion-button icon-only (click)="goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Purchase procedure
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- 
+<p>
+  buy-ad works!
+</p> -->
+
+
+
+<ion-content>
+  <ion-card>  
+    <ion-card-header>
+    <ion-card-title>{{ad?.title}}</ion-card-title>
+    ID #{{ad?.idAd}}
+    <!-- <ion-card-title>Madison, WI</ion-card-title> -->
+  </ion-card-header>
+
+</ion-card>
+
+  <ion-card>  
+    <ion-card-header>
+    <ion-card-title>Availability</ion-card-title>
+    <!-- <ion-card-title>Madison, WI</ion-card-title> -->
+  </ion-card-header>
+  <ion-card-content>
+    <ion-text style="color:green">
+    <p *ngIf="ad?.beginDate>0 && ad?.endDate>0 ">Available from: {{(ad?.beginDate>0)? (prettyDate(ad?.beginDate)): ("Date not available") }}, to {{(ad?.endDate>0)? (prettyDate(ad?.endDate)): ("Date not available") }}</p>
+  </ion-text>
+  </ion-card-content>
+</ion-card>
+  
+<ion-card>
+    <ion-card-content>
+    <h5>Sold out dates:</h5>
+    <ion-text *ngIf="benefits==null || benefits.length===0 ">None so far</ion-text>
+    <ion-list>
+      <ion-item *ngFor="let b of benefits">
+        <ion-text color="danger">
+          <h3> {{prettyDate(b.checkinDate)}} - {{prettyDate(b.checkoutDate)}}</h3>
+        </ion-text>
+       
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
+
+  <ion-item>
+    <ion-label position="floating">Select Check-In date (DD/MM/YYYY)</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [min]=minDateBegin [max]=maxDateBegin  placeholder="Select check-in date" (ionChange)="addEventBegin($event)"></ion-datetime>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label position="floating">Select Check-Out date (DD/MM/YYYY)</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" [min]=minDateEnd [max]=maxDateEnd  placeholder="Select check-out date" (ionChange)="addEventEnd($event)" ></ion-datetime>
+  </ion-item>
+  
+<ion-item *ngIf="!isValidDate">
+  <ion-text color="danger">Interval you selected is sold out or not valid. Please select a valid interval</ion-text>
+</ion-item>
+
+
+
+<ion-item>
+  <ion-label>Choose a payment channel</ion-label>
+  <ion-select interface="popover" value="PayPal" (ionChange)=setPaymentChannel($event)>
+    <ion-select-option value="PayPal">PayPal</ion-select-option>
+    <ion-select-option value="Wire Transfer">Wire Transfer</ion-select-option>
+    <ion-select-option value="Bancomat">Bancomat</ion-select-option>
+    <ion-select-option value="Credit Card">Credit Card</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<ion-card>
+  <ion-card-header>
+    
+      Base price: EUR {{prettyPrice(ad?.sellPrice)}}
+    <ion-card-title padding-top *ngIf="isValidDate">
+      Total: EUR {{prettyPrice(priceTotalCalc(ad?.sellPrice))}}
+    </ion-card-title>
+    <ion-card-subtitle>
+      Price is computed multiplying the base price by the number of selected days.
+    </ion-card-subtitle>
+  
+  </ion-card-header>
+    
+</ion-card>
+
+  <ion-action-sheet-controller></ion-action-sheet-controller>
+  <ion-toast-controller></ion-toast-controller>
+  <div class="ion-padding">
+    <ion-button (click)=buyClick() style="margin-top: 2rem;" color="success" expand="block">Buy</ion-button>
+  </div>
+  
+
+
+</ion-content>

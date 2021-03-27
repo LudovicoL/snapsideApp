@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Your ads list
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <!-- <ion-list-header>
+      <ion-label>Ads list</ion-label>
+    </ion-list-header> -->
+    <ion-searchbar showCancelButton="focus" (ionChange)="onSearchTerm($event)" placeholder="Search an item"></ion-searchbar>
+    <div *ngIf="ads?.length > 0; else noItems">
+      <ion-item *ngFor="let ad of ads" (click)="presentActionSheet(ad)" [queryParams]="{idAd:ad.idAd}" routerLinkActive="router-link-active">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-thumbnail slot="start">
+          <ion-img [src]="ad?.files"></ion-img>
+        </ion-thumbnail>
+        <ion-label>
+          <ion-text >
+            <p style="font-size: large;">{{ad?.title}}</p>
+          </ion-text>
+          <hr style="margin: .3rem;">
+          <p>{{ad?.description | slice:0:200}}</p>
+          
+          <p>{{ad?.address}}</p>
+          <hr style="margin: .3rem;">
+          <p>EUR {{prettyPrice(ad?.sellPrice)}}</p>
+        </ion-label>
+      </ion-item>
+    </div>
+    <ng-template #noItems>
+      <ion-item>
+        No items found.
+      </ion-item>
+    </ng-template>
+  </ion-list>
+</ion-content>

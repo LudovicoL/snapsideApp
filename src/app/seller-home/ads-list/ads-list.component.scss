@@ -1,0 +1,48 @@
+.welcome-card img {
+    max-height: 35vh;
+    overflow: hidden;
+  }
+  
+  .round {
+    // --width: 100%;
+    // --height: 100%;
+    --border-radius: 100%;
+    --vertical-align: middle;
+    --padding-start: 4px;
+    --padding-end: 4px;
+    
+  }
+  
+  .round-text {
+    // --width: 100%;
+    // --height: 100%;
+    // --border-radius: 50%;
+    // --vertical-align: middle;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    
+  }
+  
+  .round-solid {
+    // --width: 100%;
+    // --height: 100%;
+    --border-radius: 100%;
+    --vertical-align: middle;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    
+  }
+  
+  .item ion-thumbnail {
+    min-width: 6.5rem;    
+    min-height: 6.5rem;
+    ion-img {
+        max-width: 6.5rem;    
+        min-width: 6.5rem;
+    }
+  }
+  
+  ion-img {
+    border-radius: 6px !important;
+    overflow: hidden;
+  }

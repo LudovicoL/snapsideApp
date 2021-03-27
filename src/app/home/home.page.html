@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Snapside Mobile App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+
+<ion-content>
+  <ion-card class="welcome-card">
+    <img src="assets/background/mat.svg" alt=""/>
+    <ion-card-header>
+      <ion-card-subtitle>Hello,</ion-card-subtitle>
+      <ion-card-title>Welcome to Snapside</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        This is Snapside Mobile Ionic App! Here you can see the public area of the application, exploring the ads published by seller users.
+        Or you can log in as customer to buy the available assets and services described in ads.
+      </p>
+    </ion-card-content>     
+  </ion-card>
+
+  <section padding>
+     <ion-button expand="block" [routerLink]="['/login']">Go to login</ion-button>
+    
+    <!-- <ion-button expand="block" [routerLink]="['/login']">Login in</ion-button> -->
+  </section>
+
+ 
+
+  <ion-list lines="none">
+      <ion-card>
+        <ion-card-header >
+          <ion-card-title>
+            <h4>Be our guest!</h4>    
+          </ion-card-title>
+          <ion-card-subtitle>
+            <h5 no-padding>This is a glance of our offers.<br>
+               Login as customer to see more ads to buy!</h5>
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+      
+
+      <ion-card *ngFor="let ad of ads" class="ion-activatable">
+        
+        <ion-card-content>
+          
+          <ion-item lines="none" no-padding>
+        
+            <ion-thumbnail slot="start">
+              <img [src]="ad?.files">
+            </ion-thumbnail>
+            <ion-label>
+              <h3>{{ad?.title}}</h3>
+              <p>{{ad?.description | slice:0:200}}</p>
+              <p>{{ad?.address}}</p>
+              <p>EUR {{prettyPrice(ad?.sellPrice)}}</p>
+            </ion-label>  
+          </ion-item>
+          
+        </ion-card-content>
+        
+      </ion-card>
+  </ion-list>
+</ion-content>

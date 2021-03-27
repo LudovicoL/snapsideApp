@@ -1,0 +1,248 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button ion-button icon-only (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Ad: {{ad?.title}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+  <ion-refresher slot="fixed" id="refresher-view">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card class="welcome-card">
+    <img [src]="getImageSanitized(ad?.files)" alt="" />
+    <ion-card-header>
+      <ion-card-subtitle>ID #{{ad?.idAd}}</ion-card-subtitle>
+      <ion-card-title>{{ad?.title}}</ion-card-title>
+      {{this.category?.categoryName}}/{{this.item?.name}}
+
+      <p *ngIf="ad?.description && !( ad?.description.length>800)" style="font-size: larger;">Description: {{ad?.description}} </p>
+      <ng-container *ngIf="ad?.description && (ad?.description.length>800) && !showMoreDescription">
+        <p style="font-size: larger;">Description: {{ad?.description | slice:0:800}} ...  <a style="color:dodgerblue" (click)="toggleShowMoreDescription()">Show more</a></p>
+       
+      </ng-container>
+
+      <ng-container  *ngIf="ad?.description && (ad?.description.length>800) && showMoreDescription">
+        <p style="font-size: larger;">Description: {{ad?.description}} <a style="color:dodgerblue" (click)="toggleShowMoreDescription()" >Show less</a></p>
+        
+      </ng-container>
+      
+      <p *ngIf="ad?.address!=null">Address: {{ad?.address}} </p>
+      <ion-label>
+        Seller: @{{ad?.sellerUsername}} <br>
+        Created: {{prettyDateTime(ad?.creationDate)}}
+      </ion-label>
+      
+    </ion-card-header>
+  </ion-card> 
+  <ion-card>
+    <ion-card-content>
+      <p style="font-size:larger ;color:black!important">Base price: EUR {{(ad?.sellPrice)? (prettyPrice(ad?.sellPrice)) : ("No base price for this ad") }} </p>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Availability</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-text style="color:green">
+      <p *ngIf="ad?.beginDate>0 && ad?.endDate>0 ">Available from: {{(ad?.beginDate>0)? (prettyDate(ad?.beginDate)): ("Date not available") }}, to {{(ad?.endDate>0)? (prettyDate(ad?.endDate)): ("Date not available") }}</p>
+    </ion-text>
+    </ion-card-content>
+    <ion-card-content>
+      <h5>Sold out dates:</h5>
+      <ion-text *ngIf="benefits==null || benefits.length===0 ">None so far</ion-text>
+      <ion-list>
+        <ion-item *ngFor="let b of benefits">
+          <ion-text color="danger">
+            <h3> {{prettyDate(b.checkinDate)}} - {{prettyDate(b.checkoutDate)}}</h3>
+          </ion-text>
+         
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="attributes!=null && attributes.length>0">
+    <ion-card-header>
+      <ion-card-subtitle>Specific properties</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let a of attributes">
+            <p><b>{{a.name}}:</b> {{a.value}}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <div  *ngIf="parsedPoints!=null && parsedPoints.length>0">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Map locations</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      {{parsedPoints.length}} location(s) available
+    </ion-card-content>
+    <agm-map [latitude]="start.lat" [longitude]="start.long" [zoom]=8 [scrollwheel]="false" [mapTypeControl]="true">
+      <agm-marker *ngFor="let data of parsedPoints; let i = index" [latitude]="data.lat" [longitude]="data.long" [label]="toStr(i+1)">
+      </agm-marker>
+    </agm-map>
+  </ion-card>
+  </div>
+  <div *ngIf="displayMedia.length>0" >
+    <ion-card style=" padding-top: 0px; background-color: rgba(0, 0, 0, 0.80);">
+      <ion-card-header >
+          <ion-card-title style="color: aliceblue;">Gallery</ion-card-title>
+          <a style="color: rgba(240, 248, 255, 0.80);">{{this.displayMedia.length}} image(s)</a>
+      </ion-card-header>
+    </ion-card>
+    <ion-slides pager="true" [options]="slideOpts" style="max-height: 100%; height: 100vh; background-color: rgba(0, 0, 0, 0.80);">
+      <ion-slide *ngFor="let img of displayMedia;" >
+          <img [src]="img.content" alt="this is an image">    
+      </ion-slide>
+
+    </ion-slides>
+  </div>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Comments section</ion-card-title>
+      <ion-card-subtitle *ngIf="comments?.length===0">
+        No comments yet. Be the first to comment this ad!
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-list>
+      <ion-container *ngFor="let c of comments">
+        <ng-container *ngIf="c.comment_idcomment==null">
+          <ion-card>
+            <ion-card-subtitle padding-top padding-horizontal>{{prettyDateTime(c.creationDate)}} <br><u><b>@{{c.username}}</b></u> wrote:</ion-card-subtitle>
+          <ion-item>{{c.text}}</ion-item>
+            <ion-item>
+
+              <small *ngIf="c.rating!==-1; else notRated">Rating: {{c.rating}}/{{this.maxRating}} stars </small>
+                        <ng-template #notRated>
+                          <small>No rating</small>
+                        </ng-template>
+                        <span style="display:inline-block; width: 6px;"></span>
+              <ion-label>
+              <ng-container style="padding-left: 2px;" *ngFor="let star of maxRatingStars" >
+
+                <ion-icon *ngIf="c.rating>=star; else staroff" style="color: darkorange" name="star"></ion-icon>
+    
+                <ng-template #staroff>
+                  <ion-icon style="color: darkslategray" name="star"></ion-icon>
+                </ng-template>
+    
+              </ng-container>
+            </ion-label>
+              <ion-button (click)="setSelectedComment(c.idComment,c.text,c.username);openModal()" ><ion-icon slot="start" name="share-alt"></ion-icon>reply</ion-button>
+            </ion-item>
+            
+            
+
+
+          
+        
+          </ion-card>
+          <ng-container *ngFor="let ans of comments">
+            <ng-container *ngIf="ans.comment_idcomment===c.idComment">
+              <ion-card style="margin-left: 1rem;" >
+                <ion-card-subtitle padding-top padding-horizontal><small>{{prettyDateTime(c.creationDate)}} <br><u><b>@{{ans.username}}</b></u> replied:</small></ion-card-subtitle>
+                  <ion-item><small>{{ans.text}}</small></ion-item>
+                  
+
+                  <ion-item>
+                    <small *ngIf="ans.rating!==-1; else notRated">Rating: {{ans.rating}}/{{this.maxRating}} stars </small>
+                        <ng-template #notRated>
+                          <small>No rating</small>
+                        </ng-template>
+                        <span style="display:inline-block; width: 6px;"></span>
+                    <ion-label>
+                      
+                    <ng-container style="padding-left: 2px;" *ngFor="let star of maxRatingStars" >
+        
+                      <ion-icon *ngIf="ans.rating>=star; else staroff" style="color: darkorange" name="star"></ion-icon>
+          
+                      <ng-template #staroff>
+                        <ion-icon style="color: darkslategray" name="star"></ion-icon>
+                      </ng-template>
+          
+                    </ng-container>
+                  </ion-label>
+                    <ion-button (click)="setSelectedComment(ans.idComment,ans.text,ans.username);openModal()" ><ion-icon slot="start" name="share-alt"></ion-icon>reply</ion-button>
+                  </ion-item>
+                  
+                </ion-card>
+                <ng-container *ngFor="let ans2 of comments">
+
+                  <ion-card  *ngIf="ans2.comment_idcomment===ans.idComment" style="margin-left: 2rem;" >
+                    <ion-card-subtitle padding-top padding-horizontal><small>{{prettyDateTime(c.creationDate)}} <br><u><b>@{{ans2.username}}</b></u> replied:</small></ion-card-subtitle>
+                    <ion-item><small>{{ans2.text}}</small></ion-item>
+
+                    <ion-item >
+
+                      <small *ngIf="ans2.rating!==-1; else notRated">Rating: {{ans2.rating}}/{{this.maxRating}} stars </small>
+                        <ng-template #notRated>
+                          <small>No rating</small>
+                        </ng-template>
+                        <span style="display:inline-block; width: 6px;"></span>
+
+                      <ion-label >
+                      <ng-container style="padding-left: 2px;" *ngFor="let star of maxRatingStars" >
+          
+                        <ion-icon *ngIf="ans2.rating>=star; else staroff" style="color: darkorange" name="star"></ion-icon>
+            
+                        <ng-template #staroff>
+                          <ion-icon style="color: darkslategray" name="star"></ion-icon>
+                        </ng-template>
+            
+                      </ng-container>
+                    </ion-label>
+                    </ion-item>
+                    
+                </ion-card>
+                
+                </ng-container>
+            </ng-container>
+            
+
+          </ng-container>
+        </ng-container>
+        
+      </ion-container>
+    </ion-list>
+
+    <ion-item>
+      <ion-label position="stacked">New comment</ion-label>
+      <ion-textarea #newRootComment placeholder="Write a new comment here..."></ion-textarea>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Rating</ion-label>
+      <ion-select interface=popover value=-1 (ionChange)=setRating(ratingSel.value) #ratingSel>
+        <ion-select-option value=-1>No rating</ion-select-option>
+        <ion-select-option value=0>0 stars</ion-select-option>
+        <ion-select-option value=1>1 star</ion-select-option>
+        <ion-select-option value=2>2 stars</ion-select-option>
+        <ion-select-option value=3>3 stars</ion-select-option>
+        <ion-select-option value=4>4 stars</ion-select-option>
+        <ion-select-option value=5>5 stars</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
+    <div class="ion-padding">
+      <ion-button [disabled]="newRootComment.value==''" expand="block" type="submit" class="ion-no-margin" (click)="saveComment(null,newRootComment.value,idAd);newRootComment.value='';ratingSel.value=-1">Send</ion-button>
+    </div>
+    
+  </ion-card>
+
+</ion-content>
